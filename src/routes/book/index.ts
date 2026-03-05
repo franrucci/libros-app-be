@@ -2,10 +2,11 @@ import express from 'express';
 import controllers from './controllers';
 import validationMiddleware from '../../middlewares/validator';
 import { createBookValidationSchema } from './validations';
+import { authenticateFirebase } from '../../middlewares/authenticateFirebase';
 
 const router = express.Router();
 
-router.post('/', validationMiddleware(createBookValidationSchema), controllers.createBook);
+router.post('/', authenticateFirebase, validationMiddleware(createBookValidationSchema), controllers.createBook);
 router.get('/', controllers.getAllBooks);
 router.get('/:id', controllers.getBookById);
 router.patch('/:id', validationMiddleware(createBookValidationSchema), controllers.updateBook);

@@ -1,6 +1,6 @@
 # Backend - Ecos de Lectura
 
-Este es el backend de la aplicación Ecos de Lectura. Desarrollada con Node.js y Express. Proporciona APIs para gestionar libros, usuarios y autenticación.
+Este es el backend de la aplicación web Ecos de Lectura. Desarrollada con Node.js y Express. Proporciona APIs para gestionar libros, usuarios y autenticación.
 
 ---
 

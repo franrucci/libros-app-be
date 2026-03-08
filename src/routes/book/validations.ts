@@ -54,3 +54,11 @@ export const createBookValidationSchema = Joi.object({
         }),
 
 });
+
+export const updateBookValidationSchema = Joi.object({
+    title: Joi.string().min(3).max(255).required(),
+    author: Joi.string().min(3).max(255).required(),
+    description: Joi.string().allow("").optional(),
+    publishedDate: Joi.date().optional(),
+    coverImage: Joi.string().uri().allow("").optional(),
+});

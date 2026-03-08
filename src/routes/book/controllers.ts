@@ -5,7 +5,7 @@ import Book from '../../models/Book';
 const createBook = async (req: Request, res: Response) => {
     try {
         const { title, author, description, publishedDate, coverImage } = req.body;
-        const firebaseUid = req.body.firebaseUid; // recibimos UID de Firebase desde el front
+        const firebaseUid = req.body.firebaseUid; // recibe UID de Firebase desde el front
 
         // Busca el usuario en Mongo por firebaseUid
         const user = await User.findOne({ firebaseUid });
@@ -50,6 +50,25 @@ export const getAllBooks = async (req: Request, res: Response) => {
         res.status(500).json({
             message: "Error al obtener libros.",
             error: true,
+        });
+    }
+};
+
+export const getAllBooksAdmin = async (req: Request, res: Response) => {
+    try {
+        const books = await Book.find()
+            .populate("user", "name lastName")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            message: "Libros obtenidos correctamente",
+            data: books,
+            error: false
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error obteniendo libros",
+            error: true
         });
     }
 };
@@ -129,4 +148,25 @@ export const softDeleteBook = async (req: Request, res: Response) => {
     }
 };
 
-export default { createBook, getAllBooks, getBookById, updateBook, hardDeleteBook, softDeleteBook };
+export const activateBook = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        const book = await Book.findByIdAndUpdate(
+            id,
+            { isActive: true },
+            { new: true }
+        );
+
+        if (!book) {
+            return res.status(404).json({ message: "Libro no encontrado" });
+        }
+
+        res.status(200).json({ message: "Libro activado correctamente" });
+
+    } catch (error) {
+        res.status(500).json({ message: "Error al activar libro", error });
+    }
+};
+
+export default { createBook, getAllBooks, getAllBooksAdmin, getBookById, updateBook, hardDeleteBook, softDeleteBook, activateBook };
